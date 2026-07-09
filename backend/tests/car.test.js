@@ -22,4 +22,7 @@ describe('Staff Car API Unit Tests', () => {
         const res = await request(app).get('/api/cars/999999');
         expect(res.statusCode).toEqual(404);
     });
+    afterAll(async () => {
+        await new Promise(resolve => setTimeout(() => resolve(), 500));
+    });
 });
