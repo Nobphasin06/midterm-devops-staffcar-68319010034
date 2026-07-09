@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบบันทึกข้อมูลรถบุคลากร</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #93c5fd;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #1e3a8a;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button.btn-danger {
+            background: #dc2626;
+        }
+
+        button.btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        button.btn-edit {
+            background: #059669;
+            padding: 6px 12px;
+            margin-right: 5px;
+        }
+
+        button.btn-edit:hover {
+            background: #047857;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+        }
+
+        tr:hover {
+            background: #f1f5f9;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-waiting {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>ระบบบันทึกข้อมูลรถของบุคลากรวิทยาลัยเทคนิคเลย (staffcar)</h2>
+        <p>ผู้พัฒนา: นายนภสินธุ์ ศรีจำปา | รหัสนักศึกษา: 68319010034 | ชั้น ปวส.2/1</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h3 id="formTitle">🚗 ลงทะเบียน / แก้ไขข้อมูลรถ</h3>
+            <form id="carForm">
+                <input type="hidden" id="carId">
+                <div>
+                    <label>ทะเบียนรถ</label>
+                    <input type="text" id="plate_no" placeholder="เช่น กข 1234 เลย" required>
+                </div>
+                <div>
+                    <label>ประเภทรถ</label>
+                    <select id="type">
+                        <option value="รถยนต์">รถยนต์</option>
+                        <option value="รถจักรยานยนต์">รถจักรยานยนต์</option>
+                    </select>
+                </div>
+                <div>
+                    <label>ยี่ห้อ / รุ่น</label>
+                    <input type="text" id="brand_model" placeholder="เช่น Toyota Camry" required>
+                </div>
+                <div>
+                    <label>สีรถ</label>
+                    <input type="text" id="color" placeholder="เช่น สีดำ" required>
+                </div>
+                <div>
+                    <label>ชื่อเจ้าของรถ</label>
+                    <input type="text" id="owner" placeholder="เช่น อ.สมชาย ใจดี" required>
+                </div>
+                <div>
+                    <label>แผนกวิชา</label>
+                    <input type="text" id="department" placeholder="เช่น แผนกวิชาคอมพิวเตอร์ธุรกิจ" required>
+                </div>
+                <div class="full-width">
+                    <label>สถานะสติกเกอร์</label>
+                    <select id="status">
+                        <option value="รอออก">รอออก</option>
+                        <option value="ออกแล้ว">ออกแล้ว</option>
+                        <option value="หมดอายุ">หมดอายุ</option>
+                    </select>
+                </div>
+                <div class="full-width">
+                    <button type="submit" id="submitBtn">💾 บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>📋 รายการรถที่ลงทะเบียนเข้า-ออกวิทยาลัย</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ทะเบียนรถ</th>
+                            <th>ประเภท</th>
+                            <th>ยี่ห้อ/รุ่น</th>
+                            <th>สี</th>
+                            <th>เจ้าของ</th>
+                            <th>แผนก</th>
+                            <th>สถานะสติกเกอร์</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ใช้ Relative Path เพื่อให้เวลาทำ Reverse Proxy ผ่าน Nginx/Docker แล้วเรียกได้ถูกต้อง
+        const API_URL = '/api/cars';
+
+        // 1. ฟังก์ชันดึงข้อมูลทั้งหมด (READ)
+        async function fetchCars() {
+            try {
+                const res = await fetch(API_URL);
+                const cars = await res.json();
+                const tbody = document.getElementById('carTableBody');
+                tbody.innerHTML = '';
+
+                if (cars.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#94a3b8;">ไม่มีข้อมูลรถในระบบ</td></tr>`;
+                    return;
+                }
+
+                cars.forEach(car => {
+                    let statusClass = 'status-waiting';
+                    if (car.status === 'ออกแล้ว') statusClass = 'status-success';
+                    if (car.status === 'หมดอายุ') statusClass = 'status-expired';
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><b>${car.plate_no}</b></td>
+                            <td>${car.type}</td>
+                            <td>${car.brand_model}</td>
+                            <td>${car.color}</td>
+                            <td>${car.owner}</td>
+                            <td>${car.department}</td>
+                            <td><span class="status-badge ${statusClass}">${car.status}</span></td>
+                            <td>
+                                <button class="btn-edit" onclick="editCar(${car.id})">✏️ แก้ไข</button>
+                                <button class="btn-danger" style="padding: 6px 12px;" onclick="deleteCar(${car.id})">🗑️ ลบ</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error('Error fetching cars:', err);
+            }
+        }
+
+        // 2. ฟังก์ชัน บันทึก หรือ อัปเดตข้อมูล (CREATE & UPDATE)
+        document.getElementById('carForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('carId').value;
+            const data = {
+                plate_no: document.getElementById('plate_no').value,
+                type: document.getElementById('type').value,
+                brand_model: document.getElementById('brand_model').value,
+                color: document.getElementById('color').value,
+                owner: document.getElementById('owner').value,
+                department: document.getElementById('department').value,
+                status: document.getElementById('status').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    document.getElementById('carForm').reset();
+                    document.getElementById('carId').value = '';
+                    document.getElementById('formTitle').innerText = '🚗 ลงทะเบียน / แก้ไขข้อมูลรถ';
+                    document.getElementById('submitBtn').innerText = '💾 บันทึกข้อมูล';
+                    fetchCars();
+                }
+            } catch (err) {
+                console.error('Error saving car:', err);
+            }
+        });
+
+        // 3. ฟังก์ชันดึงข้อมูลเก่ามาใส่ฟอร์มเพื่อเตรียมแก้ไข (READ BY ID)
+        async function editCar(id) {
+            try {
+                const res = await fetch(`${API_URL}/${id}`);
+                if (res.ok) {
+                    const car = await res.json();
+                    document.getElementById('carId').value = car.id;
+                    document.getElementById('plate_no').value = car.plate_no;
+                    document.getElementById('type').value = car.type;
+                    document.getElementById('brand_model').value = car.brand_model;
+                    document.getElementById('color').value = car.color;
+                    document.getElementById('owner').value = car.owner;
+                    document.getElementById('department').value = car.department;
+                    document.getElementById('status').value = car.status;
+
+                    document.getElementById('formTitle').innerText = '✏️ แก้ไขข้อมูลรถควบคุมสติกเกอร์';
+                    document.getElementById('submitBtn').innerText = '🔄 อัปเดตข้อมูล';
+                }
+            } catch (err) {
+                console.error('Error fetching car details:', err);
+            }
+        }
+
+        // 4. ฟังก์ชันลบข้อมูล (DELETE)
+        async function deleteCar(id) {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรถคันนี้?')) {
+                try {
+                    const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        fetchCars();
+                    }
+                } catch (err) {
+                    console.error('Error deleting car:', err);
+                }
+            }
+        }
+
+        // เรียกโหลดข้อมูลครั้งแรกเมื่อเปิดหน้าเว็บ
+        fetchCars();
+    </script>
+</body>
+
+</html>

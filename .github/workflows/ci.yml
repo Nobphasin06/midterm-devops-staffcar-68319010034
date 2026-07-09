@@ -1,0 +1,41 @@
+name: DevOps Midterm CI
+
+on:
+  push:
+    branches: [ "develop", "feature/*" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Backend Deps
+        run: cd backend && npm install
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Unit Tests
+        run: |
+          cd backend
+          npm install
+          # คำสั่งรันเทสจริงบนเซิร์ฟเวอร์ GitHub
+          npx jest --passWithNoTests 
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker Backend Test
+        run: docker build ./backend -t staffcar-api:test
+      - name: Build Docker Frontend Test
+        run: docker build ./frontend -t staffcar-web:test
