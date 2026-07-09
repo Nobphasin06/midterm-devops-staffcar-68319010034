@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest --runInBand --detectOpenHandles",
-    "lint": "echo 'Linting passed'"
+    "lint": "eslint .",
+    "test": "npx jest --runInBand --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
