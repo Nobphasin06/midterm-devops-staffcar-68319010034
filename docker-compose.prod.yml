@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: staffcar-db-prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: staffcar_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+
+  backend:
+    image: nobphasin/staffcar-api:latest
+    container_name: staffcar-api-prod
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=yourpassword
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=staffcar_db
+      - PORT=5000
+    depends_on:
+      - db
+
+  frontend:
+    image: nobphasin/staffcar-web:latest
+    container_name: staffcar-web-prod
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata_prod:
