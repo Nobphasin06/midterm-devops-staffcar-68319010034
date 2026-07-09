@@ -1,6 +1,10 @@
 const request = require('supertest');
 const app = require('../index'); // ดึงหน้าเว็บ Express มาทดสอบ
 
+jest.mock('../db', () => ({
+    query: jest.fn().mockResolvedValue({ rows: [] }),
+}));
+
 describe('Staff Car API Unit Tests', () => {
 
     // Test เคสที่ 1: ตรวจสอบว่าระบบ Health Check ทำงานได้ปกติ (โจทย์บังคับ)
@@ -21,5 +25,8 @@ describe('Staff Car API Unit Tests', () => {
     it('GET /api/cars/999999 should return 404 for non-existing car', async () => {
         const res = await request(app).get('/api/cars/999999');
         expect(res.statusCode).toEqual(404);
+    });
+    afterAll(async () => {
+        await new Promise(resolve => setTimeout(() => resolve(), 500));
     });
 });
