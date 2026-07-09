@@ -1,6 +1,20 @@
-// เปลี่ยนโค้ดในจุดที่ดึงข้อมูล (SQL Query) ให้เป็น staffcars ทั้งหมด
-// ตัวอย่างจุดสำคัญๆ ใน index.js:
+const express = require('express');
+const cors = require('cors');
+const pool = require('./db');
+require('dotenv').config();
 
+// บังคับ: ต้องประกาศตัวแปร app ตรงนี้ก่อนที่จะไปเรียกใช้ app.use หรือ app.get ด้านล่าง
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// 🟢 GET /health
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', version: '1.0.0' });
+});
+
+// ... โค้ดส่วน GET /api/staffcar , POST, PUT, DELETE ตัวเดิมของคุณนภสินธุ์ยิงยาวลงไปได้เลยครับ ...
 // GET /api/staffcar
 app.get('/api/staffcar', async (req, res) => {
     try {
@@ -64,3 +78,12 @@ app.delete('/api/staffcar/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// ... โค้ดส่วนอื่นๆ ด้านบน ...
+
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+}
+
+// ⚠️ บังคับเติมบรรทัดนี้ไว้ล่างสุดของไฟล์เด็ดขาด เพื่อให้ไฟล์เทสเรียกใช้ได้!
+module.exports = app;
