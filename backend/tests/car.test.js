@@ -1,6 +1,10 @@
 const request = require('supertest');
 const app = require('../index'); // ดึงหน้าเว็บ Express มาทดสอบ
 
+jest.mock('../db', () => ({
+    query: jest.fn().mockResolvedValue({ rows: [] }),
+}));
+
 describe('Staff Car API Unit Tests', () => {
 
     // Test เคสที่ 1: ตรวจสอบว่าระบบ Health Check ทำงานได้ปกติ (โจทย์บังคับ)
