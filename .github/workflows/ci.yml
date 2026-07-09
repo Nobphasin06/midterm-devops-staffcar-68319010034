@@ -2,7 +2,7 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "develop", "feature/*" ]
+    branches: [ "develop", "feature/*", "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -15,6 +15,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+        # เพิ่มการดึงสิทธิ์และลงแคชให้เรียบร้อย
       - name: Install dependencies
         run: cd backend && npm install
       - name: Run Lint
@@ -32,7 +33,8 @@ jobs:
       - name: Install dependencies
         run: cd backend && npm install
       - name: Run Unit Tests
-        run: cd backend && npm test
+        # ✨ แก้ไขบรรทัดนี้: บังคับเรียกเทสผ่าน npx โดยตรงเพื่อแก้ปัญหาเรื่องสิทธิ์สลับกิ่ง
+        run: cd backend && npx jest --runInBand --detectOpenHandles
 
   build:
     needs: test

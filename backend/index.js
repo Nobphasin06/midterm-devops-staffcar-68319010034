@@ -3,11 +3,15 @@ const cors = require('cors');
 const pool = require('./db');
 require('dotenv').config();
 
-// บังคับ: ต้องประกาศตัวแปร app ตรงนี้ก่อนที่จะไปเรียกใช้ app.use หรือ app.get ด้านล่าง
 const app = express();
+
+// ⚠️ เพิ่มบรรทัดนี้เข้าไป เพื่อดึงค่าพอกจากไฟล์ .env หรือถ้าไม่มีให้ใช้พอร์ต 5000 เป็นตัวสำรอง
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// ... โค้ดส่วนอื่นๆ ที่เหลือของคุณนภสินธุ์ยิงยาวลงไปเหมือนเดิมเลยครับ ...
 
 // 🟢 GET /health
 app.get('/health', (req, res) => {
